@@ -61,17 +61,27 @@ const cardDeck = [ // [ unicode, value ]
 ]
 
 // Variable Declarations
+const gameMessage = document.getElementById("gameMessage");
+const startButton = document.getElementById("startButton");
+const drawButton = document.getElementById("drawButton");
+drawButton.disabled = true;
 let playDeck;
-let handOfCards = new Array();
-let sum = 0;
-let hasBlackJack = false;
-let isAlive = true;
-let hasAces = 0;
 
-let cardDisplay = document.getElementById("cardDisplay");
-let gameMessage = document.getElementById("gameMessage");
-let sumDisplay = document.getElementById("sumDisplay");
+let playerCards = new Array();
+let playerSum = 0;
+let playerBlackJack = false;
+let playerAlive = true;
+let playerAces = 0;
+const cardsPlayer = document.getElementById("cardsPlayer");
+const sumPlayer = document.getElementById("sumPlayer");
 
+let dealerCards = new Array();
+let dealerSum = 0;
+let dealerBlackJack = false;
+let dealerAlive = true;
+let dealerAces = 0;
+const cardsDealer = document.getElementById("cardsDealer");
+const sumDealer = document.getElementById("sumDealer");
 
 // Function Declarations
 
@@ -109,12 +119,15 @@ function statusCheck (handTotal) {
 
     } else if (handTotal === 21) {
         gameMessage.innerHTML = "Wohoo! You've got Blackjack!";
-        hasBlackJack = true;
+        playerBlackJack = true;
 
     } else {
         gameMessage.innerHTML = "You're out of the game!";
-        isAlive = false;
-
+        
+        // Game End
+        playerAlive = false;
+        startButton.disabled = false;
+        drawButton.disabled = true;
     }
 
 }
@@ -128,37 +141,36 @@ function drawCard () {
     card  = playDeck.shift();
 
     // Add card symbol to hand
-    handOfCards.push(card[0]);
+    playerCards.push(card[0]);
     
     // Display Cards
-    cardDisplay.innerHTML = handOfCards.toString().replaceAll(",", " ");
+    cardsPlayer.innerHTML = playerCards.toString().replaceAll(",", " ");
     
     
     // Check if Ace is drawn
     if (card[1] === 0) {
-        console.log("Found Ace");
-        hasAces = hasAces + 1;
+        playerAces = playerAces + 1;
     }
 
     // Add card value
-    sum = sum + card[1];
+    playerSum = playerSum + card[1];
     // Account for Aces
-    result = aceCombos (sum, hasAces);
+    result = aceCombos (playerSum, playerAces);
 
     // We know the Array is only ever at largest size 2
     // and the largest number is second
     if (result.length === 1) {
         statusCheck(result[0]);
-        sumDisplay.textContent = result[0];
+        sumPlayer.textContent = result[0];
 
     } else {
         if (result[1] > 21) { 
             statusCheck(result[0]);
-            sumDisplay.textContent = result[0]; 
+            sumPlayer.textContent = result[0]; 
 
         } else { 
             statusCheck(result[1]);
-            sumDisplay.textContent = result[0] + " or " + result[1]; 
+            sumPlayer.textContent = result[0] + " or " + result[1]; 
         }
     }
 
@@ -166,14 +178,25 @@ function drawCard () {
 
 function startGame () {
     // (re)Set game variables
-    handOfCards = new Array();
-    sum = 0;
-    hasBlackJack = false;
-    isAlive = true;
-    hasAces = 0;
-    cardDisplay.innerHTML = "-";
     gameMessage.innerHTML = "Let's Go!";
-    sumDisplay.innerHTML = "-";
+    startButton.disabled = true;
+    drawButton.disabled = false;
+    
+    playerCards = new Array();
+    playerSum = 0;
+    playerBlackJack = false;
+    playerAlive = true;
+    playerAces = 0;
+    cardsPlayer.innerHTML = "-";
+    sumPlayer.innerHTML = "-";
+
+    dealerCards = new Array();
+    dealerSum = 0;
+    dealerBlackJack = false;
+    dealerAlive = true;
+    dealerAces = 0;
+    cardsDealer.innerHTML = "-";
+    sumDealer.innerHTML = "-";
     
     // Create a play deck by shuffling a copy of the card deck 3 times.
     playDeck = shuffle(shuffle(shuffle( cardDeck.slice() )));
