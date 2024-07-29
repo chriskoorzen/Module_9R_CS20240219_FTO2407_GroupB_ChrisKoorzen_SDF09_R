@@ -89,16 +89,6 @@ function shuffle (cards) {
     return shuffledDeck;
 }
 
-function displayAce (number) {
-    let threshold = number + 11;
-
-    if (threshold > 21) {
-        return (number + 1).toString();
-    } else {
-        return (number + 1).toString() + " or " + (number + 11).toString();
-    }
-}
-
 function aceCombos (current, aces) { // Just output all the possibilities
     let combos = []
     
@@ -188,11 +178,4 @@ function startGame () {
     // Create a play deck by shuffling a copy of the card deck 3 times.
     playDeck = shuffle(shuffle(shuffle( cardDeck.slice() )));
 
-    // Draw and display top 2 cards
-    // drawCard ();
-    // drawCard ();
 }
-
-
-
-
