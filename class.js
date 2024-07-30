@@ -60,7 +60,7 @@ const cardDeck = [ // [ unicode, value ]
     ["&#x1F0DE;", 10],  // K of Clubs
 ]
 
-function shuffle (cards) {
+function shuffle(cards) {
     // Take an array (of implied size 52) and randomly select elements to add to new array.
     let shuffledDeck = new Array();
     let randomPick;
@@ -93,7 +93,7 @@ class Gambler {
         this.sumDisplay = elSumDisplay;
     }
 
-    reset_round(){
+    reset_round() {
         this.cards = [];
         this.aces = 0;
         this.sum = 0;
@@ -105,7 +105,7 @@ class Gambler {
         this.sumDisplay.innerHTML = "-";
     }
 
-    displayStats(){
+    displayStats() {
         // Display cards
         this.cardDisplay.innerHTML = this.cards.toString().replaceAll(",", " ");
 
@@ -121,13 +121,13 @@ class Gambler {
         }
     }
 
-    displayFirstCardOnly(){
+    displayFirstCardOnly() {
         this.cardDisplay.innerHTML = this.cards[0] + " " + cardBack;
 
         this.sumDisplay.textContent = "?"
     }
 
-    drawCard(cardSymbol, cardValue){
+    drawCard(cardSymbol, cardValue) {
         // Add card symbol to hand
         this.cards.push(cardSymbol);
 
@@ -146,7 +146,7 @@ class Gambler {
         this._setHighCount();
     }
 
-    _calcHand(){
+    _calcHand() {
         // Calculate ace combonations
         if (this.aces === 0){ 
             this.hand[0] = this.sum; 
@@ -160,7 +160,7 @@ class Gambler {
 
     }
 
-    _statusCheck(){
+    _statusCheck() {
         if (this.hand[0] > 21){ this.isAlive = false; }
         else {
             let count;
@@ -170,7 +170,7 @@ class Gambler {
         }
     }
 
-    _setHighCount(){
+    _setHighCount() {
         if (this.hand.length === 1){ this.highCount = this.hand[0]; }
         else { this.highCount = this.hand[1]; }
     }
@@ -191,7 +191,7 @@ let playDeck;
 
 
 // Game Play
-function startGame () {
+function startGame() {
     // (re)Set game variables
     gameMessage.innerHTML = "Let's Go!";
     startButton.disabled = true;
@@ -204,12 +204,106 @@ function startGame () {
     // Create a play deck by shuffling a copy of the card deck 3 times.
     playDeck = shuffle(shuffle(shuffle( cardDeck.slice() )));
 
+    // Player Draws first
+    let card = getCard();
+    player.drawCard(card[0], card[1]);
+    
+    card = getCard();
+    dealer.drawCard(card[0], card[1]);
+    
+    card = getCard();
+    player.drawCard(card[0], card[1]);
+
+    card = getCard();
+    dealer.drawCard(card[0], card[1]);
+
+    player.displayStats();
+    dealer.displayFirstCardOnly();
+    checkGameState();
 }
 
-function drawCard () {
-    // Take Card from top of the deck
+function endGame() {
+    gameMessage.innerHTML = "Play another round?";
+    startButton.disabled = false;
+    drawButton.disabled = true;
+    standButton.disabled = true;
+}
+
+function drawCard() {
+    // Player's turn
     let card = getCard();
 
     player.drawCard(card[0], card[1]);
     player.displayStats();
+    checkGameState();
+}
+
+function standTurn() {
+    // Dealer's turn
+    drawButton.disabled = true;
+    standButton.disabled = true;
+
+    // Show dealer's hand
+    dealer.displayStats();
+
+    // Dealer must never draw on 17 or above
+    while (dealer.highCount < 17) {
+        let card = getCard();
+
+        dealer.drawCard(card[0], card[1]);
+        dealer.displayStats();
+        checkGameState();
+    }
+
+    endGame();
+    if (dealer.isAlive) {
+        tallyHands();
+    }
+}
+
+function checkGameState() {
+    if (player.hasBlackJack && dealer.hasBlackJack){
+        // DRAW
+        dealer.displayStats();      // Dealer must always show cards on Blackjack
+        console.log("DRAW");
+        endGame();
+    }
+    else if (player.hasBlackJack){
+        // MEGA WINNER
+        dealer.displayStats();      // Dealer may show cards on player Blackjack
+        console.log("MEGA WINNER");
+        endGame();
+    }
+    else if (dealer.hasBlackJack){
+        // LOSER
+        dealer.displayStats();      // Dealer must always show cards on Blackjack
+        console.log("LOSER");
+        endGame();
+    }
+    else if (!player.isAlive){
+        // LOSER
+        dealer.displayStats();      // Dealer may show cards on player bust
+        console.log("LOSER");
+        endGame();
+    }
+    else if (!dealer.isAlive){
+        // WINNER
+        console.log("WINNER");
+        endGame();
+    }
+}
+
+function tallyHands() {
+    if (player.highCount === dealer.highCount){
+        // DRAW
+        console.log("DRAW");
+    }
+    else if (player.highCount > dealer.highCount) {
+        // WINNER
+        console.log("WINNER");
+    }
+    else {
+        // LOSER
+        console.log("LOSER");
+    }
 }
