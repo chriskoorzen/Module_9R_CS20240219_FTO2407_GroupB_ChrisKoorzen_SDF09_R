@@ -180,6 +180,7 @@ class Gambler {
 const player = new Gambler(document.getElementById("playerCards"), document.getElementById("playerSum"));
 const dealer = new Gambler(document.getElementById("dealerCards"), document.getElementById("dealerSum"));
 
+const gameStatus = document.getElementById("gameStatus");
 const gameMessage = document.getElementById("gameMessage");
 const startButton = document.getElementById("startButton");
 const drawButton = document.getElementById("drawButton");
@@ -193,7 +194,8 @@ let playDeck;
 // Game Play
 function startGame() {
     // (re)Set game variables
-    gameMessage.innerHTML = "Let's Go!";
+    gameStatus.innerHTML = "Let's Go!";
+    gameMessage.innerHTML = "";
     startButton.disabled = true;
     drawButton.disabled = false;
     standButton.disabled = false;
@@ -256,7 +258,7 @@ function standTurn() {
     }
 
     endGame();
-    if (dealer.isAlive) {
+    if (dealer.isAlive && !dealer.hasBlackJack) {
         tallyHands();
     }
 }
@@ -265,30 +267,30 @@ function checkGameState() {
     if (player.hasBlackJack && dealer.hasBlackJack){
         // DRAW
         dealer.displayStats();      // Dealer must always show cards on Blackjack
-        console.log("DRAW");
+        gameStatus.innerHTML = "BlackJack Draw!";
         endGame();
     }
     else if (player.hasBlackJack){
         // MEGA WINNER
         dealer.displayStats();      // Dealer may show cards on player Blackjack
-        console.log("MEGA WINNER");
+        gameStatus.innerHTML = "Mega Winner! You got BlackJack!";
         endGame();
     }
     else if (dealer.hasBlackJack){
         // LOSER
         dealer.displayStats();      // Dealer must always show cards on Blackjack
-        console.log("LOSER");
+        gameStatus.innerHTML = "Oops, dealer has BlackJack! You Lose.";
         endGame();
     }
     else if (!player.isAlive){
         // LOSER
         dealer.displayStats();      // Dealer may show cards on player bust
-        console.log("LOSER");
+        gameStatus.innerHTML = "You Busted! Better luck next time.";
         endGame();
     }
     else if (!dealer.isAlive){
         // WINNER
-        console.log("WINNER");
+        gameStatus.innerHTML = "Dealer Busted! You Win!";
         endGame();
     }
 }
@@ -296,14 +298,14 @@ function checkGameState() {
 function tallyHands() {
     if (player.highCount === dealer.highCount){
         // DRAW
-        console.log("DRAW");
+        gameStatus.innerHTML = "It's a Draw!";
     }
     else if (player.highCount > dealer.highCount) {
         // WINNER
-        console.log("WINNER");
+        gameStatus.innerHTML = "You win!";
     }
     else {
         // LOSER
-        console.log("LOSER");
+        gameStatus.innerHTML = "You lose..";
     }
 }
