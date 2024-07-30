@@ -1,5 +1,14 @@
 "use strict";       // ECMAScript v5 compliant.
 
+// Utility functions
+function sleep(ms) {    // source: https://coreui.io/blog/how-to-sleep-in-javascript/
+    return new Promise(
+        doesnt_matter => {
+            return setTimeout(doesnt_matter, ms)
+        }
+    );
+}  
+
 // Static Declarations
 const cardBack = "&#x1F0A0;";
 const cardDeck = [ // [ [ html-unicode, card-color ], value ]
@@ -210,13 +219,11 @@ let playDeck;
 
 
 // Game Play
-function startGame() {
+async function startGame() {
     // (re)Set game variables
     gameStatus.innerHTML = "Let's Go!";
     gameMessage.innerHTML = "";
     startButton.disabled = true;
-    drawButton.disabled = false;
-    standButton.disabled = false;
 
     player.reset_round();
     dealer.reset_round();
@@ -227,18 +234,28 @@ function startGame() {
     // Player Draws first
     let card = getCard();
     player.drawCard(card[0], card[1]);
+    player.displayStats();
+    await sleep(800);
+
+    gameStatus.innerHTML = "Dealing..";
     
     card = getCard();
     dealer.drawCard(card[0], card[1]);
+    dealer.displayStats();
+    await sleep(800);
     
     card = getCard();
     player.drawCard(card[0], card[1]);
+    player.displayStats();
+    await sleep(800);
 
     card = getCard();
     dealer.drawCard(card[0], card[1]);
-
-    player.displayStats();
     dealer.displayFirstCardOnly();
+
+    gameStatus.innerHTML = "Your Move..";
+    drawButton.disabled = false;
+    standButton.disabled = false;
     checkGameState();
 }
 
@@ -258,19 +275,20 @@ function drawCard() {
     checkGameState();
 }
 
-function standTurn() {
+async function standTurn() {
     // Dealer's turn
     drawButton.disabled = true;
     standButton.disabled = true;
 
     // Show dealer's hand
+    await sleep(500);
     dealer.displayStats();
 
     // Dealer must never draw on 17 or above
     while (dealer.highCount < 17) {
         let card = getCard();
-
         dealer.drawCard(card[0], card[1]);
+        await sleep(1000);
         dealer.displayStats();
         checkGameState();
     }
