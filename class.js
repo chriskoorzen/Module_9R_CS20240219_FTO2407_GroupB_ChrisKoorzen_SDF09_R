@@ -2,7 +2,7 @@
 
 // Static Declarations
 const cardBack = "&#x1F0A0;";
-const cardDeck = [ // [ unicode, value ]
+const cardDeck = [ // [ [ html-unicode, card-color ], value ]
     [["&#x1F0A1;", "black"], 0],   // Ace of Spades
     [["&#x1F0A2;", "black"], 2],   // 2 of Spades
     [["&#x1F0A3;", "black"], 3],   // 3 of Spades
@@ -102,7 +102,7 @@ class Gambler {
         this.cards = [];
         this.aces = 0;
         this.sum = 0;
-        this.hand = [];                 // Always two possibilities (because of Aces)
+        this.hand = [];                 // Maximum two possibilities (because of Aces)
         this.highCount = 0
         this.hasBlackJack = false;
         this.isAlive = true;
@@ -124,7 +124,6 @@ class Gambler {
 
     displayStats() {
         // Display cards
-        // this.cardDisplay.innerHTML = this.cards.toString().replaceAll(",", " ");
         this.cardDisplay.innerHTML = styleCards(this.cards);
 
         // Display Sum
@@ -140,8 +139,8 @@ class Gambler {
     }
 
     displayFirstCardOnly() {
-        // this.cardDisplay.innerHTML = this.cards[0] + " " + cardBack;
-        this.cardDisplay.innerHTML = styleCards( [this.cards[0], [cardBack, "orange"]] );
+        // Pass in first card, and cardBack with preferred color. Must pass an array.
+        this.cardDisplay.innerHTML = styleCards( [this.cards[0], [cardBack, "rebeccapurple"]] );
 
         this.sumDisplay.textContent = "?"
     }
