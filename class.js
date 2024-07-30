@@ -3,62 +3,79 @@
 // Static Declarations
 const cardBack = "&#x1F0A0;";
 const cardDeck = [ // [ unicode, value ]
-    ["&#x1F0A1;", 0],   // Ace of Spades
-    ["&#x1F0A2;", 2],   // 2 of Spades
-    ["&#x1F0A3;", 3],   // 3 of Spades
-    ["&#x1F0A4;", 4],   // 4 of Spades
-    ["&#x1F0A5;", 5],   // 5 of Spades
-    ["&#x1F0A6;", 6],   // 6 of Spades
-    ["&#x1F0A7;", 7],   // 7 of Spades
-    ["&#x1F0A8;", 8],   // 8 of Spades
-    ["&#x1F0A9;", 9],   // 9 of Spades
-    ["&#x1F0AA;", 10],  // 10 of Spades
-    ["&#x1F0AB;", 10],  // J of Spades
-    ["&#x1F0AD;", 10],  // Q of Spades
-    ["&#x1F0AE;", 10],  // K of Spades
+    [["&#x1F0A1;", "black"], 0],   // Ace of Spades
+    [["&#x1F0A2;", "black"], 2],   // 2 of Spades
+    [["&#x1F0A3;", "black"], 3],   // 3 of Spades
+    [["&#x1F0A4;", "black"], 4],   // 4 of Spades
+    [["&#x1F0A5;", "black"], 5],   // 5 of Spades
+    [["&#x1F0A6;", "black"], 6],   // 6 of Spades
+    [["&#x1F0A7;", "black"], 7],   // 7 of Spades
+    [["&#x1F0A8;", "black"], 8],   // 8 of Spades
+    [["&#x1F0A9;", "black"], 9],   // 9 of Spades
+    [["&#x1F0AA;", "black"], 10],  // 10 of Spades
+    [["&#x1F0AB;", "black"], 10],  // J of Spades
+    [["&#x1F0AD;", "black"], 10],  // Q of Spades
+    [["&#x1F0AE;", "black"], 10],  // K of Spades
 
-    ["&#x1F0B1;", 0],   // Ace of Hearts
-    ["&#x1F0B2;", 2],   // 2 of Hearts
-    ["&#x1F0B3;", 3],   // 3 of Hearts
-    ["&#x1F0B4;", 4],   // 4 of Hearts
-    ["&#x1F0B5;", 5],   // 5 of Hearts
-    ["&#x1F0B6;", 6],   // 6 of Hearts
-    ["&#x1F0B7;", 7],   // 7 of Hearts
-    ["&#x1F0B8;", 8],   // 8 of Hearts
-    ["&#x1F0B9;", 9],   // 9 of Hearts
-    ["&#x1F0BA;", 10],  // 10 of Hearts
-    ["&#x1F0BB;", 10],  // J of Hearts
-    ["&#x1F0BD;", 10],  // Q of Hearts
-    ["&#x1F0BE;", 10],  // K of Hearts
+    [["&#x1F0B1;", "red"], 0],   // Ace of Hearts
+    [["&#x1F0B2;", "red"], 2],   // 2 of Hearts
+    [["&#x1F0B3;", "red"], 3],   // 3 of Hearts
+    [["&#x1F0B4;", "red"], 4],   // 4 of Hearts
+    [["&#x1F0B5;", "red"], 5],   // 5 of Hearts
+    [["&#x1F0B6;", "red"], 6],   // 6 of Hearts
+    [["&#x1F0B7;", "red"], 7],   // 7 of Hearts
+    [["&#x1F0B8;", "red"], 8],   // 8 of Hearts
+    [["&#x1F0B9;", "red"], 9],   // 9 of Hearts
+    [["&#x1F0BA;", "red"], 10],  // 10 of Hearts
+    [["&#x1F0BB;", "red"], 10],  // J of Hearts
+    [["&#x1F0BD;", "red"], 10],  // Q of Hearts
+    [["&#x1F0BE;", "red"], 10],  // K of Hearts
 
-    ["&#x1F0C1;", 0],   // Ace of Diamonds
-    ["&#x1F0C2;", 2],   // 2 of Diamonds
-    ["&#x1F0C3;", 3],   // 3 of Diamonds
-    ["&#x1F0C4;", 4],   // 4 of Diamonds
-    ["&#x1F0C5;", 5],   // 5 of Diamonds
-    ["&#x1F0C6;", 6],   // 6 of Diamonds
-    ["&#x1F0C7;", 7],   // 7 of Diamonds
-    ["&#x1F0C8;", 8],   // 8 of Diamonds
-    ["&#x1F0C9;", 9],   // 9 of Diamonds
-    ["&#x1F0CA;", 10],  // 10 of Diamonds
-    ["&#x1F0CB;", 10],  // J of Diamonds
-    ["&#x1F0CD;", 10],  // Q of Diamonds
-    ["&#x1F0CE;", 10],  // K of Diamonds
+    [["&#x1F0C1;", "red"], 0],   // Ace of Diamonds
+    [["&#x1F0C2;", "red"], 2],   // 2 of Diamonds
+    [["&#x1F0C3;", "red"], 3],   // 3 of Diamonds
+    [["&#x1F0C4;", "red"], 4],   // 4 of Diamonds
+    [["&#x1F0C5;", "red"], 5],   // 5 of Diamonds
+    [["&#x1F0C6;", "red"], 6],   // 6 of Diamonds
+    [["&#x1F0C7;", "red"], 7],   // 7 of Diamonds
+    [["&#x1F0C8;", "red"], 8],   // 8 of Diamonds
+    [["&#x1F0C9;", "red"], 9],   // 9 of Diamonds
+    [["&#x1F0CA;", "red"], 10],  // 10 of Diamonds
+    [["&#x1F0CB;", "red"], 10],  // J of Diamonds
+    [["&#x1F0CD;", "red"], 10],  // Q of Diamonds
+    [["&#x1F0CE;", "red"], 10],  // K of Diamonds
 
-    ["&#x1F0D1;", 0],   // Ace of Clubs
-    ["&#x1F0D2;", 2],   // 2 of Clubs
-    ["&#x1F0D3;", 3],   // 3 of Clubs
-    ["&#x1F0D4;", 4],   // 4 of Clubs
-    ["&#x1F0D5;", 5],   // 5 of Clubs
-    ["&#x1F0D6;", 6],   // 6 of Clubs
-    ["&#x1F0D7;", 7],   // 7 of Clubs
-    ["&#x1F0D8;", 8],   // 8 of Clubs
-    ["&#x1F0D9;", 9],   // 9 of Clubs
-    ["&#x1F0DA;", 10],  // 10 of Clubs
-    ["&#x1F0DB;", 10],  // J of Clubs
-    ["&#x1F0DD;", 10],  // Q of Clubs
-    ["&#x1F0DE;", 10],  // K of Clubs
+    [["&#x1F0D1;", "black"], 0],   // Ace of Clubs
+    [["&#x1F0D2;", "black"], 2],   // 2 of Clubs
+    [["&#x1F0D3;", "black"], 3],   // 3 of Clubs
+    [["&#x1F0D4;", "black"], 4],   // 4 of Clubs
+    [["&#x1F0D5;", "black"], 5],   // 5 of Clubs
+    [["&#x1F0D6;", "black"], 6],   // 6 of Clubs
+    [["&#x1F0D7;", "black"], 7],   // 7 of Clubs
+    [["&#x1F0D8;", "black"], 8],   // 8 of Clubs
+    [["&#x1F0D9;", "black"], 9],   // 9 of Clubs
+    [["&#x1F0DA;", "black"], 10],  // 10 of Clubs
+    [["&#x1F0DB;", "black"], 10],  // J of Clubs
+    [["&#x1F0DD;", "black"], 10],  // Q of Clubs
+    [["&#x1F0DE;", "black"], 10],  // K of Clubs
 ]
+
+function styleCards(cardArray){
+    // Wraps card html-code in a span element
+    // add css class, and card color
+    // returns entire string of HTML
+    let htmlString = "";
+    for (let card of cardArray){
+        let element = document.createElement("span");
+        element.className = "playingCard";
+        element.innerHTML = card[0];
+        element.style.color = card[1];
+
+        htmlString = htmlString + " " + element.outerHTML;
+    }
+
+    return htmlString;
+}
 
 function shuffle(cards) {
     // Take an array (of implied size 52) and randomly select elements to add to new array.
@@ -107,7 +124,8 @@ class Gambler {
 
     displayStats() {
         // Display cards
-        this.cardDisplay.innerHTML = this.cards.toString().replaceAll(",", " ");
+        // this.cardDisplay.innerHTML = this.cards.toString().replaceAll(",", " ");
+        this.cardDisplay.innerHTML = styleCards(this.cards);
 
         // Display Sum
         // Array is either size 1 or size 2
@@ -122,7 +140,8 @@ class Gambler {
     }
 
     displayFirstCardOnly() {
-        this.cardDisplay.innerHTML = this.cards[0] + " " + cardBack;
+        // this.cardDisplay.innerHTML = this.cards[0] + " " + cardBack;
+        this.cardDisplay.innerHTML = styleCards( [this.cards[0], [cardBack, "orange"]] );
 
         this.sumDisplay.textContent = "?"
     }
