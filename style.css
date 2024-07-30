@@ -12,7 +12,7 @@ h2 {
 }
 
 hr {
-    margin: 35px auto 15px;
+    margin: 25px auto 15px;
     color: beige;
 }
 
@@ -65,6 +65,38 @@ hr {
     background-color: bisque;
     border-radius: 8px;
 }
+
+#betLine {
+    margin-top: 35px;
+    width: 60%;
+}
+
+#betLine p{
+    display: inline-block;
+    color: goldenrod;
+    font-weight: 900;
+    font-size: 24px;
+    margin: 12px 0;
+}
+#addCashButton,
+#subCashButton {
+    float: right;
+    width: 34px;
+    height: 34px;
+    margin: 0 10px;
+    margin-top: 12px;
+    font-weight: 900;
+    font-size: 20px;
+    border-radius: 100%;
+}
+
+#walletLine {
+    display: inline-block;
+    margin: 0 0 0 20px;
+    color: goldenrod;
+    font-weight: 600;
+}
+
 
 .playingCard {
     background-color: whitesmoke;

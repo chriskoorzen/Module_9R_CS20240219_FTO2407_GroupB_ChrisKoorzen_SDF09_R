@@ -27,10 +27,18 @@
         <h2>Your Cards:</h1>
         <h1 id="playerCards">-</h1>
         <p id="playerSum">-</p>
+        <div id="betLine">
+            <p>Bet: R <span id="stakedCash">0</span></p>
+            <button id="addCashButton" onclick="bank.addBet()">+</button>
+            <button id="subCashButton" onclick="bank.subBet()">-</button>
+        </div>
+
         <hr>
-        <button id="startButton" onclick="startGame()">START GAME</button>
+        <button id="startButton" onclick="startGame()">START DEAL</button>
         <button id="drawButton"  onclick="drawCard()">DRAW CARD</button>
         <button id="standButton" onclick="standTurn()">STAND TURN</button>
+
+        <p id="walletLine">Your Wallet: R <span id="playerCash">0</span></p>
         <p id="gameMessage"></p>
     </div>
 

@@ -203,6 +203,46 @@ class Gambler {
     }
 }
 
+const bank = {
+    playerWallet: 500,
+    stakedBet: 0,
+    walletDisplay: document.getElementById("playerCash"),
+    potDisplay: document.getElementById("stakedCash"),
+    addButton:  document.getElementById("addCashButton"),
+    subButton:  document.getElementById("subCashButton"),
+    addBet: function() {
+        if (this.playerWallet >= 10){
+            this.playerWallet = this.playerWallet -10;
+            this.stakedBet = this.stakedBet +10;
+            this.updateDisplay();
+        }
+    },
+    subBet: function() {
+        if (this.stakedBet >= 10){
+            this.stakedBet = this.stakedBet -10;
+            this.playerWallet = this.playerWallet +10;
+            this.updateDisplay();
+        }
+    },
+    payout: function(multiplier) {
+        this.playerWallet = this.playerWallet + (this.stakedBet * multiplier);
+        this.stakedBet = 0;
+        this.updateDisplay();
+    },
+    updateDisplay: function() {
+        this.walletDisplay.innerHTML = this.playerWallet;
+        this.potDisplay.innerHTML = this.stakedBet;
+    },
+    disableBetting: function() {
+        this.addButton.disabled = true;
+        this.subButton.disabled = true;
+    },
+    enableBetting: function() {
+        this.addButton.disabled = false;
+        this.subButton.disabled = false;
+    },
+}
+
 // Variable Declarations
 const player = new Gambler(document.getElementById("playerCards"), document.getElementById("playerSum"));
 const dealer = new Gambler(document.getElementById("dealerCards"), document.getElementById("dealerSum"));
@@ -214,6 +254,7 @@ const drawButton = document.getElementById("drawButton");
 const standButton = document.getElementById("standButton");
 drawButton.disabled = true;
 standButton.disabled = true;
+bank.updateDisplay();
 
 let playDeck;
 
@@ -224,6 +265,7 @@ async function startGame() {
     gameStatus.innerHTML = "Let's Go!";
     gameMessage.innerHTML = "";
     startButton.disabled = true;
+    bank.disableBetting();
 
     player.reset_round();
     dealer.reset_round();
@@ -264,6 +306,7 @@ function endGame() {
     startButton.disabled = false;
     drawButton.disabled = true;
     standButton.disabled = true;
+    bank.enableBetting();
 }
 
 function drawCard() {
@@ -304,29 +347,34 @@ function checkGameState() {
         // DRAW
         dealer.displayStats();      // Dealer must always show cards on Blackjack
         gameStatus.innerHTML = "BlackJack Draw!";
+        bank.payout(1);
         endGame();
     }
     else if (player.hasBlackJack){
         // MEGA WINNER
         dealer.displayStats();      // Dealer may show cards on player Blackjack
         gameStatus.innerHTML = "Mega Winner! You got BlackJack!";
+        bank.payout(2.5);
         endGame();
     }
     else if (dealer.hasBlackJack){
         // LOSER
         dealer.displayStats();      // Dealer must always show cards on Blackjack
         gameStatus.innerHTML = "Oops, dealer has BlackJack! You Lose.";
+        bank.payout(0);
         endGame();
     }
     else if (!player.isAlive){
         // LOSER
         dealer.displayStats();      // Dealer may show cards on player bust
         gameStatus.innerHTML = "You Busted! Better luck next time.";
+        bank.payout(0);
         endGame();
     }
     else if (!dealer.isAlive){
         // WINNER
         gameStatus.innerHTML = "Dealer Busted! You Win!";
+        bank.payout(2);
         endGame();
     }
 }
@@ -335,13 +383,16 @@ function tallyHands() {
     if (player.highCount === dealer.highCount){
         // DRAW
         gameStatus.innerHTML = "It's a Draw!";
+        bank.payout(1);
     }
     else if (player.highCount > dealer.highCount) {
         // WINNER
         gameStatus.innerHTML = "You win!";
+        bank.payout(2);
     }
     else {
         // LOSER
         gameStatus.innerHTML = "You lose..";
+        bank.payout(0);
     }
 }
