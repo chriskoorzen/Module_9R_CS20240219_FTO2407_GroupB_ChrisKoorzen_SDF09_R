@@ -10,7 +10,7 @@ function sleep(ms) {    // source: https://coreui.io/blog/how-to-sleep-in-javasc
 }  
 
 // Static Declarations
-const cardBack = "&#x1F0A0;";
+const cardBack = ["&#x1F0A0;", "rebeccapurple"];
 const cardDeck = [ // [ [ html-unicode, card-color ], value ]
     [["&#x1F0A1;", "black"], 0],   // Ace of Spades
     [["&#x1F0A2;", "black"], 2],   // 2 of Spades
@@ -69,16 +69,18 @@ const cardDeck = [ // [ [ html-unicode, card-color ], value ]
     [["&#x1F0DE;", "black"], 10],  // K of Clubs
 ]
 
-function styleCards(cardArray){
+function styleCards(cardSymbolArray){
     // Wraps card html-code in a span element
     // add css class, and card color
-    // returns entire string of HTML
+    // returns entire "hand" as string of HTML
     let htmlString = "";
-    for (let card of cardArray){
-        let element = document.createElement("span");
-        element.className = "playingCard";
-        element.innerHTML = card[0];
-        element.style.color = card[1];
+    let cardSymbol;
+    let element = document.createElement("span");
+    element.className = "playingCard";
+    
+    for (cardSymbol of cardSymbolArray){
+        element.innerHTML = cardSymbol[0];
+        element.style.color = cardSymbol[1];
 
         htmlString = htmlString + " " + element.outerHTML;
     }
@@ -86,15 +88,18 @@ function styleCards(cardArray){
     return htmlString;
 }
 
-function shuffle(cards) {
-    // Take an array (of implied size 52) and randomly select elements to add to new array.
+function shuffle(cardsArray) {
+    // Take an array of cards and randomly select elements to add to new array.
+    // ! Caution - destroys original array.
+    // Returns same size array of cards.
+    let deckSize = cardsArray.length -1;     // Offset for zero-indexing
     let shuffledDeck = new Array();
     let randomPick;
     
-    for (let i = 51; i > -1; i--) {
-        randomPick = Math.floor(Math.random() * i);
+    for (let i = deckSize; i > -1; i--) {
+        randomPick = Math.floor(Math.random() * i);  // select random integer between 0 and current deck size
 
-        shuffledDeck.push( cards.splice(randomPick, 1)[0] );
+        shuffledDeck.push( cardsArray.splice(randomPick, 1)[0] );
     }
 
     return shuffledDeck;
@@ -148,8 +153,8 @@ class Gambler {
     }
 
     displayFirstCardOnly() {
-        // Pass in first card, and cardBack with preferred color. Must pass an array.
-        this.cardDisplay.innerHTML = styleCards( [this.cards[0], [cardBack, "rebeccapurple"]] );
+        // Pass in first card and cardBack. Must always pass an array.
+        this.cardDisplay.innerHTML = styleCards( [this.cards[0], cardBack] );
 
         this.sumDisplay.textContent = "?"
     }
@@ -203,7 +208,7 @@ class Gambler {
     }
 }
 
-const bank = {
+const bank = {      // Singleton declaration.
     playerWallet: 500,
     stakedBet: 0,
     walletDisplay: document.getElementById("playerCash"),
@@ -211,6 +216,7 @@ const bank = {
     addButton:  document.getElementById("addCashButton"),
     subButton:  document.getElementById("subCashButton"),
     addBet: function() {
+        // Do bet sizes in increments of 10 for simplicity, to avoid floats.
         if (this.playerWallet >= 10){
             this.playerWallet = this.playerWallet -10;
             this.stakedBet = this.stakedBet +10;
@@ -256,7 +262,7 @@ drawButton.disabled = true;
 standButton.disabled = true;
 bank.updateDisplay();
 
-let playDeck;
+let playDeck;   // reusable, modifiable deck. (We never modify the "cardDeck" definition.)
 
 
 // Game Play
@@ -270,7 +276,7 @@ async function startGame() {
     player.reset_round();
     dealer.reset_round();
     
-    // Create a play deck by shuffling a copy of the card deck 3 times.
+    // Create a fresh play deck by shuffling a copy of the card deck 3 times.
     playDeck = shuffle(shuffle(shuffle( cardDeck.slice() )));
 
     // Player Draws first
@@ -296,6 +302,8 @@ async function startGame() {
     dealer.displayFirstCardOnly();
 
     gameStatus.innerHTML = "Your Move..";
+
+    // Allow player to make a decision
     drawButton.disabled = false;
     standButton.disabled = false;
     checkGameState();
