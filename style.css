@@ -1,3 +1,32 @@
-h1 {
-    color: blue;
+body {
+    background-image: url('images/table.png');
+    background-size:cover;
+}
+
+svg {
+    height: 100%;
+}
+
+#titleBanner {
+    position:relative;
+    height: 150px;
+    margin: 0 auto;
+    width: max-content;
+}
+
+#titlePips {
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+#viewBox{
+    display: block;
+    width: 480px;
+    margin: 40px auto;
+}
+
+.playingCard {
+    background-color: whitesmoke;
+    border-radius: 4px;
 }

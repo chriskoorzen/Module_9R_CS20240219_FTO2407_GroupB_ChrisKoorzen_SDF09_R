@@ -9,19 +9,30 @@
     <title>BlackJack ♠️♥️♦️♣️</title>
 </head>
 <body>
-    <h1>BLACK JACK</h1>
+    <div id="titleBanner">
+        <svg viewBox="0 0 180 80" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+            <text font-size="11" x="50" y="20">ezyBrowser's</text>
+            <path id="header" d="M 0 78 A 200 200 0 0 1 180 78" fill="none" stroke="none"/>
+            <text font-size="32" text-anchor='middle' fill='black' stroke='black'>
+              <textPath xlink:href="#header" startOffset="50%" >Black Jack</textPath>
+            </text>
+        </svg>
+    </div>
+    <h1 id="titlePips" > ♠️ ♥️ ♦️ ♣️ </h1>
+    <div id="viewBox">
+        <p id="gameStatus">Want to play a round?</p>
+        <h1>Dealer Cards:</h1>
+        <h1 id="dealerCards">-</h1>
+        <p id="dealerSum">-</p>
+        <h1>Your Cards:</h1>
+        <h1 id="playerCards">-</h1>
+        <p id="playerSum">-</p>
+        <button id="startButton" onclick="startGame()">START GAME</button>
+        <button id="drawButton"  onclick="drawCard()">DRAW CARD</button>
+        <button id="standButton" onclick="standTurn()">STAND TURN</button>
+        <p id="gameMessage"></p>
+    </div>
 
-    <p id="gameStatus">Want to play a round?</p>
-    <h1>Dealer Cards:</h1>
-    <h1 id="dealerCards">-</h1>
-    <p id="dealerSum">-</p>
-    <h1>Your Cards:</h1>
-    <h1 id="playerCards">-</h1>
-    <p id="playerSum">-</p>
-    <button id="startButton" onclick="startGame()">START GAME</button>
-    <button id="drawButton" onclick="drawCard()">DRAW CARD</button>
-    <button id="standButton" onclick="standTurn()">STAND TURN</button>
-    <p id="gameMessage"></p>
     <script src="class.js" charset="utf-8"></script>
 </body>
 </html>
