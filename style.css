@@ -77,7 +77,9 @@ hr {
     font-weight: 900;
     font-size: 24px;
     margin: 12px 0;
+    text-shadow: 2px 2px #042404;
 }
+
 #addCashButton,
 #subCashButton {
     float: right;
@@ -90,13 +92,31 @@ hr {
     border-radius: 100%;
 }
 
+#startButton,
+#drawButton,
+#standButton {
+    padding: 8px 6px;
+}
+
 #walletLine {
     display: inline-block;
     margin: 0 0 0 20px;
     color: goldenrod;
     font-weight: 600;
+    font-size: 16px;
+    text-shadow: 2px 2px #042404;
 }
 
+#gameMessage {
+    width: 92%;
+    height: 23px;
+    margin: 30px auto;
+    color: whitesmoke;
+    text-align: center;
+    padding: 12px;
+    border-radius: 5px;
+    background-color: #042404;
+}
 
 .playingCard {
     background-color: whitesmoke;
