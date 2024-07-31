@@ -1,6 +1,6 @@
 "use strict";       // ECMAScript v5 compliant.
 
-// Utility functions
+// ----- Utility functions -----
 function sleep(ms) {    // source: https://coreui.io/blog/how-to-sleep-in-javascript/
     return new Promise(
         doesnt_matter => {
@@ -9,9 +9,10 @@ function sleep(ms) {    // source: https://coreui.io/blog/how-to-sleep-in-javasc
     );
 }  
 
-// Static Declarations
-const cardBack = ["&#x1F0A0;", "rebeccapurple"];
-const cardDeck = [ // [ [ html-unicode, card-color ], value ]
+// ----- Playing Cards -----
+// TODO - These declarations can be wrapped up into a class definition
+const cardDeck = [ 
+    // [ [ html-unicode, card-color ], value ]
     [["&#x1F0A1;", "black"], 0],   // Ace of Spades
     [["&#x1F0A2;", "black"], 2],   // 2 of Spades
     [["&#x1F0A3;", "black"], 3],   // 3 of Spades
@@ -68,6 +69,8 @@ const cardDeck = [ // [ [ html-unicode, card-color ], value ]
     [["&#x1F0DD;", "black"], 10],  // Q of Clubs
     [["&#x1F0DE;", "black"], 10],  // K of Clubs
 ]
+const cardBack = ["&#x1F0A0;", "rebeccapurple"];
+let playDeck;   // reusable, modifiable deck. (We never modify the "cardDeck" definition.)
 
 function styleCards(cardSymbolArray){
     // Wraps card html-code in a span element
@@ -111,6 +114,7 @@ function getCard() {
     return card;
 }
 
+// ----- Players -----
 class Gambler {
     constructor(elCardDisplay, elSumDisplay){
         this.cards = [];
@@ -208,7 +212,9 @@ class Gambler {
     }
 }
 
-const bank = {      // Singleton declaration.
+// ----- Money Manager -----
+// Declare, and initialize values simultaneously.
+const bank = {
     playerWallet: 500,
     stakedBet: 0,
     walletDisplay: document.getElementById("playerCash"),
@@ -249,107 +255,18 @@ const bank = {      // Singleton declaration.
     },
 }
 
-// Variable Declarations
-const player = new Gambler(document.getElementById("playerCards"), document.getElementById("playerSum"));
-const dealer = new Gambler(document.getElementById("dealerCards"), document.getElementById("dealerSum"));
-
+// ----- UI Elements -----
 const gameStatus = document.getElementById("gameStatus");
 const gameMessage = document.getElementById("gameMessage");
 const startButton = document.getElementById("startButton");
 const drawButton = document.getElementById("drawButton");
 const standButton = document.getElementById("standButton");
-drawButton.disabled = true;
-standButton.disabled = true;
-bank.updateDisplay();
 
-let playDeck;   // reusable, modifiable deck. (We never modify the "cardDeck" definition.)
+// ----- Init Hardcoded Players -----
+const player = new Gambler(document.getElementById("playerCards"), document.getElementById("playerSum"));
+const dealer = new Gambler(document.getElementById("dealerCards"), document.getElementById("dealerSum"));
 
-
-// Game Play
-async function startGame() {
-    // (re)Set game variables
-    gameStatus.innerHTML = "Let's Go!";
-    gameMessage.innerHTML = "";
-    startButton.disabled = true;
-    bank.disableBetting();
-
-    player.reset_round();
-    dealer.reset_round();
-    
-    // Create a fresh play deck by shuffling a copy of the card deck 3 times.
-    playDeck = shuffle(shuffle(shuffle( cardDeck.slice() )));
-
-    // Player Draws first
-    let card = getCard();
-    player.drawCard(card[0], card[1]);
-    player.displayStats();
-    await sleep(800);
-
-    gameStatus.innerHTML = "Dealing..";
-    
-    card = getCard();
-    dealer.drawCard(card[0], card[1]);
-    dealer.displayStats();
-    await sleep(800);
-    
-    card = getCard();
-    player.drawCard(card[0], card[1]);
-    player.displayStats();
-    await sleep(800);
-
-    card = getCard();
-    dealer.drawCard(card[0], card[1]);
-    dealer.displayFirstCardOnly();
-
-    gameStatus.innerHTML = "Your Move..";
-
-    // Allow player to make a decision
-    drawButton.disabled = false;
-    standButton.disabled = false;
-    checkGameState();
-}
-
-function endGame() {
-    gameMessage.innerHTML = "Play another round?";
-    startButton.disabled = false;
-    drawButton.disabled = true;
-    standButton.disabled = true;
-    bank.enableBetting();
-}
-
-function drawCard() {
-    // Player's turn
-    let card = getCard();
-
-    player.drawCard(card[0], card[1]);
-    player.displayStats();
-    checkGameState();
-}
-
-async function standTurn() {
-    // Dealer's turn
-    drawButton.disabled = true;
-    standButton.disabled = true;
-
-    // Show dealer's hand
-    await sleep(500);
-    dealer.displayStats();
-
-    // Dealer must never draw on 17 or above
-    while (dealer.highCount < 17) {
-        let card = getCard();
-        dealer.drawCard(card[0], card[1]);
-        await sleep(1000);
-        dealer.displayStats();
-        checkGameState();
-    }
-
-    endGame();
-    if (dealer.isAlive && !dealer.hasBlackJack) {
-        tallyHands();
-    }
-}
-
+// ----- Main Gameplay Functions -----
 function checkGameState() {
     if (player.hasBlackJack && dealer.hasBlackJack){
         // DRAW
@@ -404,3 +321,93 @@ function tallyHands() {
         bank.payout(0);
     }
 }
+
+function endGame() {
+    gameMessage.innerHTML = "Play another round?";
+    startButton.disabled = false;
+    drawButton.disabled = true;
+    standButton.disabled = true;
+    bank.enableBetting();
+}
+
+// Player Actions
+async function startGame() {
+    // (re)Set game variables
+    gameStatus.innerHTML = "Let's Go!";
+    gameMessage.innerHTML = "";
+    startButton.disabled = true;
+    bank.disableBetting();
+
+    player.reset_round();
+    dealer.reset_round();
+    
+    // Create a fresh play deck by shuffling a copy of the card deck 3 times.
+    playDeck = shuffle(shuffle(shuffle( cardDeck.slice() )));
+
+    // Player Draws first
+    let card = getCard();
+    player.drawCard(card[0], card[1]);
+    player.displayStats();
+    await sleep(800);
+
+    gameStatus.innerHTML = "Dealing..";
+    
+    card = getCard();
+    dealer.drawCard(card[0], card[1]);
+    dealer.displayStats();
+    await sleep(800);
+    
+    card = getCard();
+    player.drawCard(card[0], card[1]);
+    player.displayStats();
+    await sleep(800);
+
+    card = getCard();
+    dealer.drawCard(card[0], card[1]);
+    dealer.displayFirstCardOnly();
+
+    gameStatus.innerHTML = "Your Move..";
+
+    // Allow player to make a decision
+    drawButton.disabled = false;
+    standButton.disabled = false;
+    checkGameState();
+}
+
+function drawCard() {
+    // Player's turn
+    let card = getCard();
+
+    player.drawCard(card[0], card[1]);
+    player.displayStats();
+    checkGameState();
+}
+
+async function standTurn() {
+    // Dealer's turn
+    drawButton.disabled = true;
+    standButton.disabled = true;
+
+    // Show dealer's hand
+    await sleep(500);
+    dealer.displayStats();
+
+    // Dealer must never draw on 17 or above
+    while (dealer.highCount < 17) {
+        let card = getCard();
+        dealer.drawCard(card[0], card[1]);
+        await sleep(1000);
+        dealer.displayStats();
+        checkGameState();
+    }
+
+    endGame();
+    if (dealer.isAlive && !dealer.hasBlackJack) {
+        tallyHands();
+    }
+}
+
+// ----- Set Initial Game State -----
+drawButton.disabled = true;
+standButton.disabled = true;
+bank.updateDisplay();
